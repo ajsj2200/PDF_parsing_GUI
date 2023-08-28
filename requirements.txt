@@ -2,3 +2,4 @@ streamlit
 langchain
 PyMuPDF
 beautifulsoup4 
+pdfminer
