@@ -3,3 +3,6 @@ Easily extract text from an English thesis PDF and finally generate a markdown f
 
 # How to run
 streamlit run main.py
+
+# Just use this Link
+https://pdfparsinggui-juhyohwang.streamlit.app/
