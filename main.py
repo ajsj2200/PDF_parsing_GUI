@@ -1,6 +1,9 @@
 import streamlit as st
 from utils import pdfprocess
 import pandas as pd
+import importlib
+
+importlib.reload(pdfprocess)
 
 
 def process_text(session):
@@ -106,6 +109,8 @@ def processing_pdf(file):
                         (text_key, label))
                     st.experimental_rerun()
 
+            st.markdown('---')
+            st.header("Add Custom Section")
             # Input for custom label
             custom_label = st.text_input("Enter Paragraph Name:")
 
@@ -171,12 +176,19 @@ def main():
         st.experimental_rerun()
 
     uploaded_file = st.file_uploader("select PDF File.", type=["pdf"])
+
+    st.markdown('---')
+    st.markdown("""When your PDF has untidy formulas or content,
+                you can use the prompts below to chatgpt to clean it up.
+                After using the prompts,
+                paste the contents of your PDF to use them""")
+
     st.header('PDF Prompt(English)')
     st.code("""
             Given the text of a research paper, please return the text with the following modifications:
             Any mathematical formulas should be wrapped with $$ at the beginning and end of the formula.
             Correct any inconsistencies in paragraph spacing to ensure the text flows smoothly.
-            Input Text: [Your research paper text here]
+            Input Text: [Enter thesis text]
             """, language='python')
     st.header('PDF Prompt(Korean)')
     st.code("""
