@@ -1,10 +1,6 @@
 import streamlit as st
 from utils import pdfprocess
 import pandas as pd
-import importlib
-
-importlib.reload(pdfprocess)
-
 
 def process_text(session):
     """Process and format the input text."""
