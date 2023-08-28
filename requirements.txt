@@ -1,3 +1,4 @@
 streamlit
 langchain
 PyMuPDF
+beautifulsoup4 
