@@ -131,6 +131,12 @@ def load_pdf_content(file_buffer, max_chars=1000):
     doc = fitz.open(temp_file_path)
     outline = [x[1] for x in doc.get_toc()]
 
+    # 중복된 목차가 있다면 _1, _2, ...를 붙여준다.
+    for i in range(len(outline)):
+        for j in range(i+1, len(outline)):
+            if outline[i] == outline[j]:
+                outline[j] += f'_{j-i}'
+
     MAX_CHARS = max_chars  # or any number you choose
     mds = ''
     h = None
