@@ -2,4 +2,4 @@ streamlit
 langchain
 PyMuPDF
 beautifulsoup4 
-pdfminer
+pdfminer.six
