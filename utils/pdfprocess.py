@@ -7,6 +7,7 @@ import tempfile
 import os
 import streamlit as st
 
+
 def split_text_at_period(text, max_chars, buffer=10):
     """Split the text based on the maximum character limit and specific patterns."""
     parts = []
@@ -18,6 +19,7 @@ def split_text_at_period(text, max_chars, buffer=10):
 
     text = text.replace('\n', ' ')
     text = text.replace('•', '\n\n•')
+    text = re.sub(r'\([^)]*\)', '', text)
 
     while text:
         if len(text) <= max_chars:
@@ -52,7 +54,6 @@ def split_text_at_period(text, max_chars, buffer=10):
         parts.append(part)
 
     return parts
-
 
 
 @st.cache_data
