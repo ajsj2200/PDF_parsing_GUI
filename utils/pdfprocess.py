@@ -11,8 +11,8 @@ import streamlit as st
 def split_text_at_period(text, max_chars, buffer=10):
     """Split the text based on the maximum character limit and specific patterns."""
     parts = []
-    figure_table_pattern = re.compile(r'(Figure \d+:|Table \d+:)')
     number_parenthesis_pattern = re.compile(r'\d+\),')
+    parenthesis_pattern = re.compile(r'\([^\)]+\)\.')  # 괄호와 점이 함께 있는 패턴
 
     # Remove (cid:숫자) pattern from the text
     text = re.sub(r'\(cid:\d+\)', '', text)
@@ -25,30 +25,25 @@ def split_text_at_period(text, max_chars, buffer=10):
             parts.append(text)
             break
 
-        figure_table_match = figure_table_pattern.search(text)
+        # Look for a point to split the text
+        split_point = text.rfind('.', 0, max_chars)
 
-        if figure_table_match and figure_table_match.start() < max_chars:
-            if figure_table_match.start() > 0:  # Ensure we're not at the very start
-                parts.append(
-                    text[:figure_table_match.start()].strip() + '\n\n')
-                text = text[figure_table_match.start():]
-                continue  # Move to next iteration to process the Figure/Table part
-            else:
-                part = text[:figure_table_match.end() + 1] + '\n\n'
-                text = text[figure_table_match.end() + 1:]
+        # Check if the split point is within a parenthesis
+        parenthesis_match = parenthesis_pattern.search(text)
+        if parenthesis_match:
+            # If the split_point is within the parenthesis pattern, extend the split_point beyond it.
+            if parenthesis_match.start() < split_point < parenthesis_match.end():
+                split_point = parenthesis_match.end() - 1
+
+        if split_point != -1:
+            # Check within a buffer ahead for the number pattern.
+            if number_parenthesis_pattern.search(text[split_point:split_point + buffer]):
+                split_point = text.rfind('.', 0, split_point)
+            part = text[:split_point + 1].strip()
+            text = text[split_point + 2:].strip()
         else:
-            split_point = text.rfind('.', 0, max_chars)
-
-            if split_point != -1:
-                # Check within a buffer ahead for the number pattern.
-                if number_parenthesis_pattern.search(text[split_point:split_point+buffer]):
-                    split_point = text.rfind('.', 0, split_point)
-
-                part = text[:split_point + 1] + '\n\n'
-                text = text[split_point + 2:]
-            else:
-                part = text[:max_chars]
-                text = text[max_chars:]
+            part = text[:max_chars].strip()
+            text = text[max_chars:].strip()
 
         parts.append(part)
 
