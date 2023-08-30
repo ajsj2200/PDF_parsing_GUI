@@ -12,7 +12,8 @@ def split_text_at_period(text, max_chars, buffer=10):
     """Split the text based on the maximum character limit and specific patterns."""
     parts = []
     number_parenthesis_pattern = re.compile(r'\d+\),')
-    parenthesis_pattern = re.compile(r'\([^\)]+\)\.')  # 괄호와 점이 함께 있는 패턴
+    special_pattern = re.compile(
+        r'(\([^\)]+\)\.|\[[^\]]+\]\.)')  # 괄호나 대괄호와 점이 함께 있는 패턴
 
     # Remove (cid:숫자) pattern from the text
     text = re.sub(r'\(cid:\d+\)', '', text)
@@ -28,12 +29,12 @@ def split_text_at_period(text, max_chars, buffer=10):
         # Look for a point to split the text
         split_point = text.rfind('.', 0, max_chars)
 
-        # Check if the split point is within a parenthesis
-        parenthesis_match = parenthesis_pattern.search(text)
-        if parenthesis_match:
-            # If the split_point is within the parenthesis pattern, extend the split_point beyond it.
-            if parenthesis_match.start() < split_point < parenthesis_match.end():
-                split_point = parenthesis_match.end() - 1
+        # Check if the split point is within a special pattern like parenthesis or square brackets
+        special_match = special_pattern.search(text)
+        if special_match:
+            # If the split_point is within the special pattern, extend the split_point beyond it.
+            if special_match.start() < split_point < special_match.end():
+                split_point = special_match.end() - 1
 
         if split_point != -1:
             # Check within a buffer ahead for the number pattern.
