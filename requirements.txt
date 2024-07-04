@@ -3,3 +3,4 @@ langchain
 PyMuPDF
 beautifulsoup4 
 pdfminer.six
+langchain-community
