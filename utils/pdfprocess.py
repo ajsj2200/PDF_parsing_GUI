@@ -2,7 +2,7 @@ import fitz
 import re
 from bs4 import BeautifulSoup
 from langchain.docstore.document import Document
-from langchain.document_loaders import PDFMinerPDFasHTMLLoader
+from langchain_community.document_loaders import PDFMinerPDFasHTMLLoader
 import tempfile
 import os
 import streamlit as st
